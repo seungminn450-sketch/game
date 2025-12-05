@@ -31,7 +31,7 @@ const accelRevMS=2.6;
 const brakeMS=6.5;
 const dragMS=0.8;
 const mPerPx=0.14;
-const epsilonStop=0.05;
+const epsilonStop=0.02;
 let lateralVelPx=0;
 let steerHoldTime=0;
 const keys={ArrowUp:false,ArrowDown:false,ArrowLeft:false,ArrowRight:false,KeyQ:false,KeyE:false};
@@ -71,7 +71,7 @@ function update(dt){
     velocityMS=Math.max(-topSpeedMS,Math.min(topSpeedMS,velocityMS));
     if(gear==='D'&&velocityMS<0)velocityMS=0;
     if(gear==='R'&&velocityMS>0)velocityMS=0;
-    if(Math.abs(velocityMS)<epsilonStop)velocityMS=0;
+    if(Math.abs(velocityMS)<epsilonStop && !keys.ArrowUp && !keys.ArrowDown)velocityMS=0;
   }
   brakeLightStrength=((gear==='D'&&keys.ArrowDown&&velocityMS>0)||(gear==='R'&&keys.ArrowUp&&velocityMS<0))?1:0;
   let steer=0; if(keys.ArrowLeft)steer-=1; if(keys.ArrowRight)steer+=1;
@@ -86,12 +86,9 @@ function update(dt){
   laneW=roadWidth/lanes;
   let bLeft=roadLeft+currentLane*laneW;
   let bRight=roadLeft+(currentLane+1)*laneW;
-  if(x<bLeft && !blinkerLeft){x=bLeft; ldwActive=true; ldwUntil=tNow+1200}
-  else if(x>bRight && !blinkerRight){x=bRight; ldwActive=true; ldwUntil=tNow+1200}
-  else {
-    const newLane=Math.max(0,Math.min(lanes-1,Math.floor((x-roadLeft)/laneW)));
-    if(newLane!==currentLane){currentLane=newLane; if(blinkerLeft||blinkerRight){blinkerCancelAt=tNow+1200}}
-  }
+  if((x<bLeft && !blinkerLeft) || (x>bRight && !blinkerRight)){ ldwActive=true; ldwUntil=tNow+1200 }
+  const newLane=Math.max(0,Math.min(lanes-1,Math.floor((x-roadLeft)/laneW)));
+  if(newLane!==currentLane){currentLane=newLane; if(blinkerLeft||blinkerRight){blinkerCancelAt=tNow+1200}}
   if(x<roadLeft+20)x=roadLeft+20; if(x>roadRight-20)x=roadRight-20;
   roadOffsetM+=velocityMS*dt; distanceMeters+=Math.abs(velocityMS)*dt;
   if(steer!==0){steerHoldTime=tNow} else { if(tNow-steerHoldTime>5000){ if(blinkerLeft)blinkerLeft=false; if(blinkerRight)blinkerRight=false }}
