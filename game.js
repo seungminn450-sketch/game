@@ -90,7 +90,7 @@ function update(dt){
   const newLane=Math.max(0,Math.min(lanes-1,Math.floor((x-roadLeft)/laneW)));
   if(newLane!==currentLane){currentLane=newLane; if(blinkerLeft||blinkerRight){blinkerCancelAt=tNow+1200}}
   if(x<roadLeft+20)x=roadLeft+20; if(x>roadRight-20)x=roadRight-20;
-  roadOffsetM+=velocityMS*dt; distanceMeters+=Math.abs(velocityMS)*dt;
+  roadOffsetM-=velocityMS*dt; distanceMeters+=Math.abs(velocityMS)*dt;
   if(steer!==0){steerHoldTime=tNow} else { if(tNow-steerHoldTime>5000){ if(blinkerLeft)blinkerLeft=false; if(blinkerRight)blinkerRight=false }}
 }
 const sideObjects=[]; 
@@ -109,7 +109,7 @@ function drawRoad(){
     }
   }
 }
-function drawCar(){ctx.save();ctx.translate(x,y);ctx.rotate(angle);ctx.fillStyle='#2d9cdb';ctx.beginPath();ctx.moveTo(-22,28);ctx.lineTo(22,28);ctx.quadraticCurveTo(26,10,16,-28);ctx.lineTo(-16,-28);ctx.quadraticCurveTo(-26,10,-22,28);ctx.fill();ctx.fillStyle='#1b75bb';ctx.fillRect(-18,-26,36,8);ctx.fillStyle='#111827';ctx.fillRect(-24,-10,10,22);ctx.fillRect(14,-10,10,22);ctx.fillStyle='#0b2036';ctx.fillRect(-14,-22,28,12);if(headlights){ctx.save();ctx.globalAlpha=0.25;ctx.fillStyle='#fff5c0';ctx.beginPath();ctx.moveTo(-24,-28);ctx.lineTo(24,-28);ctx.lineTo(0,-180);ctx.closePath();ctx.fill();ctx.restore()}ctx.fillStyle='#ffd54f';if(velocityMS>0){ctx.fillRect(-16,-28,10,6);ctx.fillRect(6,-28,10,6)}ctx.fillStyle=brakeLightStrength? '#ff5a5a' : '#ff3b3b';if(brakeLightStrength){ctx.fillRect(-18,22,12,6);ctx.fillRect(6,22,12,6)}if(gear==='R'&&Math.abs(velocityMS)>0){ctx.fillStyle='#e6e6e6';ctx.fillRect(-18,22,12,6);ctx.fillRect(6,22,12,6)}if(blinkerLeft&&blinkOn){ctx.fillStyle='#ffbf00';ctx.beginPath();ctx.arc(-22,0,6,0,Math.PI*2);ctx.fill()}if(blinkerRight&&blinkOn){ctx.fillStyle='#ffbf00';ctx.beginPath();ctx.arc(22,0,6,0,Math.PI*2);ctx.fill()}ctx.restore();}
+function drawCar(){ctx.save();ctx.translate(x,y);ctx.rotate(angle);ctx.fillStyle='#2d9cdb';ctx.beginPath();ctx.moveTo(-22,28);ctx.lineTo(22,28);ctx.quadraticCurveTo(26,10,16,-28);ctx.lineTo(-16,-28);ctx.quadraticCurveTo(-26,10,-22,28);ctx.fill();ctx.fillStyle='#1b75bb';ctx.fillRect(-18,-26,36,8);ctx.fillStyle='#111827';ctx.fillRect(-24,-10,10,22);ctx.fillRect(14,-10,10,22);ctx.fillStyle='#0b2036';ctx.fillRect(-14,-22,28,12);if(headlights){ctx.save();ctx.globalAlpha=0.25;ctx.fillStyle='#fff5c0';ctx.beginPath();ctx.moveTo(-24,-28);ctx.lineTo(24,-28);ctx.lineTo(0,-180);ctx.closePath();ctx.fill();ctx.restore()}ctx.fillStyle='#ffd54f';if(velocityMS>0){ctx.fillRect(-16,-28,10,6);ctx.fillRect(6,-28,10,6)}ctx.fillStyle=brakeLightStrength? '#ff5a5a' : '#ff3b3b';if(brakeLightStrength){ctx.fillRect(-18,22,12,6);ctx.fillRect(6,22,12,6)}if(gear==='R'){ctx.fillStyle='#e6e6e6';ctx.fillRect(-18,22,12,6);ctx.fillRect(6,22,12,6)}if(blinkerLeft&&blinkOn){ctx.fillStyle='#ffbf00';ctx.beginPath();ctx.arc(-22,0,6,0,Math.PI*2);ctx.fill()}if(blinkerRight&&blinkOn){ctx.fillStyle='#ffbf00';ctx.beginPath();ctx.arc(22,0,6,0,Math.PI*2);ctx.fill()}ctx.restore();}
 function draw(){drawRoad();drawCar();}
 let last=performance.now();
 let dtGlobal=0;let tNow=performance.now();
@@ -118,7 +118,7 @@ function loop(t){
   const kmhInstant=Math.abs(velocityMS)*3.6; kmhSmooth+= (kmhInstant-kmhSmooth)*0.2; const kmhDisplay= kmhSmooth<0.5? 0 : Math.round(kmhSmooth); speedBadge.textContent='속도: '+kmhDisplay+' km/h';
   const km=(distanceMeters/1000); const odo=Math.floor(km).toString().padStart(6,'0')+'.'+(km%1).toFixed(1).split('.')[1];
   distBadge.textContent='주행거리: '+odo+' km';
-  const start=210,end=30; const gaugeAngle=start+(end-start)*(Math.min(1,kmh/220)); needle.style.transform='rotate('+gaugeAngle+'deg)';
+  const start=210,end=30; const gaugeAngle=start+(end-start)*(Math.min(1,kmhInstant/220)); needle.style.transform='rotate('+gaugeAngle+'deg)';
   if(blinkerLeft||blinkerRight){ if(t-lastBlink>500){ blinkOn=!blinkOn; lastBlink=t } } else { blinkOn=false }
   if(hazard){ blinkerLeft=true; blinkerRight=true }
   if(blinkerCancelAt && t>blinkerCancelAt && !hazard){ blinkerLeft=false; blinkerRight=false; blinkerCancelAt=0 }
