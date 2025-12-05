@@ -1,0 +1,23 @@
+html,body{height:100%;margin:0}
+body{background:#0f1115;color:#e6e6e6;font-family:system-ui,Segoe UI,Roboto,Apple SD Gothic Neo,Malgun Gothic,sans-serif;display:flex;align-items:center;justify-content:center}
+.wrap{width:960px;max-width:100%;display:grid;grid-template-rows:auto 1fr auto;gap:12px;padding:12px}
+#hud{display:flex;align-items:center;justify-content:space-between;background:#1a1f29;border:1px solid #2a3442;border-radius:10px;padding:10px}
+.stats{display:flex;gap:16px;align-items:center}
+.badge{background:#0f1722;border:1px solid #2a3442;border-radius:8px;padding:8px 10px;min-width:88px;text-align:center}
+.gear{display:flex;gap:8px;align-items:center}
+.gear button{background:#0f1722;color:#e6e6e6;border:1px solid #2a3442;border-radius:6px;padding:8px 10px;cursor:pointer}
+.gear button.active{background:#2a3442}
+.blinkers{display:flex;gap:8px;align-items:center}
+.blinker{width:16px;height:16px;border-radius:50%;border:2px solid #ffbf00}
+.blinker.on{background:#ffbf00;box-shadow:0 0 10px #ffbf00}
+.blinkers button{background:#0f1722;color:#e6e6e6;border:1px solid #2a3442;border-radius:6px;padding:6px 8px;cursor:pointer}
+.blinkers button.active{background:#2a3442}
+#game{background:#0b1320;border:1px solid #2a3442;border-radius:10px;display:grid;grid-template-columns:1fr;place-items:center;position:relative}
+canvas{background:linear-gradient(#0b1320,#0a1020);border-radius:10px}
+#help{background:#1a1f29;border:1px solid #2a3442;border-radius:10px;padding:10px;font-size:14px}
+#help kbd{background:#111827;border:1px solid #2a3442;border-radius:4px;padding:2px 6px}
+.gauge{width:120px;height:120px;position:relative}
+.dial{width:100%;height:100%;border-radius:50%;background:conic-gradient(from 210deg,#0f1722 0 70%,#1a2433 70% 100%);border:2px solid #2a3442;position:relative}
+.dial .ticks{position:absolute;inset:12px;border-radius:50%;box-shadow:inset 0 0 0 1px #2a3442}
+.needle{position:absolute;width:2px;height:50%;left:50%;top:50%;transform-origin:50% 100%;background:#ff3b3b;transform:rotate(210deg)}
+.dial .center{position:absolute;width:12px;height:12px;border-radius:50%;background:#e6e6e6;left:50%;top:50%;transform:translate(-50%,-50%)}

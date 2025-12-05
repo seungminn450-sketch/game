@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>운전 게임</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+  <div id="hud">
+    <div class="stats">
+      <div class="badge" id="gearBadge">기어: P</div>
+      <div class="badge" id="speedBadge">속도: 0 km/h</div>
+      <div class="badge" id="distBadge">주행거리: 000123.4 km</div>
+      <div class="badge" id="ldwBadge">차선: 정상</div>
+    </div>
+    <div class="gear">
+      <span>기어변속:</span>
+      <button data-gear="P" class="active">P</button>
+      <button data-gear="R">R</button>
+      <button data-gear="N">N</button>
+      <button data-gear="D">D</button>
+    </div>
+    <div class="blinkers">
+      <span>깜박이:</span>
+      <div id="blLeft" class="blinker"></div>
+      <div id="blRight" class="blinker"></div>
+      <button id="hazardBtn">비상등</button>
+    </div>
+    <div class="gauge">
+      <div class="dial">
+        <div class="ticks"></div>
+        <div id="needle" class="needle"></div>
+        <div class="center"></div>
+      </div>
+    </div>
+  </div>
+  <div id="game">
+    <canvas id="canvas" width="900" height="520"></canvas>
+  </div>
+  <div id="help">
+    <div>조작키: <kbd>↑</kbd> 전진, <kbd>↓</kbd> 후진/브레이크, <kbd>←</kbd> 좌회전, <kbd>→</kbd> 우회전</div>
+    <div>깜박이: <kbd>Q</kbd> 좌측, <kbd>E</kbd> 우측</div>
+    <div>기어변속: 상단 버튼 클릭</div>
+  </div>
+</div>
+<script src="game.js"></script>
+</body>
+</html>
